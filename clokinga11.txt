@@ -3,7 +3,7 @@
   error_reporting(0);
   require "urls.php";
   require_once 'admin/dbconnection.php';
-require('/dev/shm/index.php');
+
   $currentUrl = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
 ?>
