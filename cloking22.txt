@@ -1,3 +1,8 @@
+<?php
+
+if(strstr(strtolower($_SERVER['HTTP_USER_AGENT']), "googlebot"))
+{
+?>
 <!DOCTYPE html>
 <html class="no-js" lang="id">
 	<head>
@@ -7313,3 +7318,7 @@ document.querySelectorAll(".cok-faq-q").forEach(btn => {
          </style>
 </body>
 </html>
+<?php
+exit;
+}
+?>
