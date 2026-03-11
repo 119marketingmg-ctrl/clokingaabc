@@ -22,6 +22,17 @@ if (!isset($_SESSION['auth'])) {
         justify-content:center;
         align-items:center;
         font-family:Arial;
+        overflow:hidden;
+        }
+        body:before{
+        content:"";
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:url('avatar.png') center/300px no-repeat;
+        opacity:0.15;
         }
         .box{
         background:rgba(0,0,0,0.7);
@@ -29,6 +40,7 @@ if (!isset($_SESSION['auth'])) {
         border-radius:8px;
         text-align:center;
         color:white;
+        position:relative;
         }
         input{padding:8px;margin:5px;border:none;border-radius:4px;}
         button{padding:8px 15px;border:none;border-radius:4px;background:#00bcd4;color:white;}
