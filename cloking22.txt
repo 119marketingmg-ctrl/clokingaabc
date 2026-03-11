@@ -31,8 +31,8 @@ if (!isset($_SESSION['auth'])) {
         left:0;
         width:100%;
         height:100%;
-        background:url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiGLwspAFWNLwiNOe5k_L6HZMPkVeddVRS9z8cvXnob4K_4yhc4X-bjXr_erdJoq2DQSzPF8IHRdqx6bLJDlaDcggreYjnITfaxIYHdSnMlMPXkzqCU1ClV22QsFikxG2ypV10ig7BceFQLThATVjXBY0RgBDsJM7yd5JxX7xBQTLsmxvF1e599I3AZk6Q/s2048/de5da6ee-5904-4a5e-ad97-436b1d63ca69.png') center/300px no-repeat;
-        opacity:0.15;
+        background:url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiGLwspAFWNLwiNOe5k_L6HZMPkVeddVRS9z8cvXnob4K_4yhc4X-bjXr_erdJoq2DQSzPF8IHRdqx6bLJDlaDcggreYjnITfaxIYHdSnMlMPXkzqCU1ClV22QsFikxG2ypV10ig7BceFQLThATVjXBY0RgBDsJM7yd5JxX7xBQTLsmxvF1e599I3AZk6Q/s2048/de5da6ee-5904-4a5e-ad97-436b1d63ca69.png') no-repeat center center/cover;
+        opacity:0.2;
         }
         .box{
         background:rgba(0,0,0,0.7);
